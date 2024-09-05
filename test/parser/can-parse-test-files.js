@@ -4,6 +4,7 @@ const exampleRobotsBcc = require('../test-data/example-robots-txt-bcc.js');
 const exampleRobotsKarwei = require('../test-data/example-robots-txt-karwei.js');
 const exampleRobotsShort = require('../test-data/example-robots-txt-short.js');
 const exampleRobotsZalando = require('../test-data/example-robots-txt-zalando.js');
+const exampleRobotsEmpty = require('../test-data/example-robots-txt-empty.js');
 const parse = require('../../src/parser.js');
 
 const { expect } = chai;
@@ -64,6 +65,14 @@ describe('can-parse-test-files', () => {
     expect(parseResult['*'].disallow).to.have.lengthOf(16);
     expect(parseResult['screaming frog seo spider'].allow).to.have.lengthOf(0);
     expect(parseResult['screaming frog seo spider'].disallow).to.have.lengthOf(1);
+    expect(parseResult.sitemaps).to.have.lengthOf(0);
+  });
+
+  it('Should completely parse robots-txt-empty', () => {
+    const parseResult = parse(exampleRobotsEmpty);
+    const userAgents = Object.keys(parseResult).filter((val) => val !== 'sitemaps' && val !== 'host');
+    expect(userAgents).to.have.lengthOf(0);
+    expect(parseResult).to.have.keys(['sitemaps']);
     expect(parseResult.sitemaps).to.have.lengthOf(0);
   });
 });
